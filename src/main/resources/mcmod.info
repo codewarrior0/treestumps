@@ -1,0 +1,16 @@
+[
+{
+  "modid": "treestumps",
+  "name": "Treestumps",
+  "description": "Encourages the creation of treestumps.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Codewarrior"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
