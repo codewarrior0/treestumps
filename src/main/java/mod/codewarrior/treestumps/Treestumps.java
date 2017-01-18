@@ -56,7 +56,7 @@ public class Treestumps
             }
         }
 
-        item = above.getBlock().getPickBlock(above, null, world, pos, null);
+        item = above.getBlock().getPickBlock(above, null, world, pos.offset(EnumFacing.UP), null);
         if(item != null) {
             ids = OreDictionary.getOreIDs(item);
 
