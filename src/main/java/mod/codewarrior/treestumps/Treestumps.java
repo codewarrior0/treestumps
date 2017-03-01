@@ -24,7 +24,7 @@ import java.util.List;
 public class Treestumps
 {
     public static final String MODID = "treestumps";
-    public static final String VERSION = "1.0";
+    public static final String VERSION = "2.0.0";
     
     @EventHandler
     public void init(FMLInitializationEvent event)
@@ -45,7 +45,7 @@ public class Treestumps
 
         int[] ids;
 
-        if (item != null) {
+        if (!item.isEmpty()) {
             ids = OreDictionary.getOreIDs(item);
 
             // Make a log harder if it is above dirt.
@@ -57,7 +57,7 @@ public class Treestumps
         }
 
         item = above.getBlock().getPickBlock(above, null, world, pos.offset(EnumFacing.UP), null);
-        if(item != null) {
+        if(!item.isEmpty()) {
             ids = OreDictionary.getOreIDs(item);
 
             // Make dirt harder if it is below a log.
