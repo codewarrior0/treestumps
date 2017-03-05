@@ -34,10 +34,14 @@ public class Treestumps
 
     @SubscribeEvent
     public void breakSpeed(PlayerEvent.BreakSpeed breakSpeedEvent) {
-        IBlockState state = breakSpeedEvent.getState();
+        // IBlockState state = breakSpeedEvent.getState();
+        // C&B lies about this state. Get the state from the world instead.
+
         EntityPlayer player = breakSpeedEvent.getEntityPlayer();
         World world = player.getEntityWorld();
         BlockPos pos = breakSpeedEvent.getPos();
+        IBlockState state = world.getBlockState(pos);
+
         ItemStack item = state.getBlock().getPickBlock(state, null, world, pos, null);
         IBlockState below = world.getBlockState(pos.offset(EnumFacing.DOWN));
         IBlockState above = world.getBlockState(pos.offset(EnumFacing.UP));
