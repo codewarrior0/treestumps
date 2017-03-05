@@ -42,7 +42,7 @@ public class Treestumps
         BlockPos pos = breakSpeedEvent.getPos();
         IBlockState state = world.getBlockState(pos);
 
-        ItemStack item = state.getBlock().getPickBlock(state, null, world, pos, null);
+        ItemStack item = state.getBlock().getPickBlock(state, null, world, pos, player);
         IBlockState below = world.getBlockState(pos.offset(EnumFacing.DOWN));
         IBlockState above = world.getBlockState(pos.offset(EnumFacing.UP));
         int logWood = OreDictionary.getOreID("logWood");
@@ -60,7 +60,7 @@ public class Treestumps
             }
         }
 
-        item = above.getBlock().getPickBlock(above, null, world, pos.offset(EnumFacing.UP), null);
+        item = above.getBlock().getPickBlock(above, null, world, pos.offset(EnumFacing.UP), player);
         if(!item.isEmpty()) {
             ids = OreDictionary.getOreIDs(item);
 
