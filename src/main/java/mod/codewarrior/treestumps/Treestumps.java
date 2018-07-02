@@ -24,7 +24,7 @@ import java.util.List;
 public class Treestumps
 {
     public static final String MODID = "treestumps";
-    public static final String VERSION = "2.0.0";
+    public static final String VERSION = "$$VERSION$$";
     
     @EventHandler
     public void init(FMLInitializationEvent event)
