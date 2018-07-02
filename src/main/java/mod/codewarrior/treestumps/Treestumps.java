@@ -6,7 +6,9 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -42,7 +44,8 @@ public class Treestumps
         BlockPos pos = breakSpeedEvent.getPos();
         IBlockState state = world.getBlockState(pos);
 
-        ItemStack item = state.getBlock().getPickBlock(state, null, world, pos, player);
+        RayTraceResult target = ForgeHooks.rayTraceEyes(player, player.getEntityAttribute(EntityPlayer.REACH_DISTANCE).getAttributeValue() + 1);
+        ItemStack item = state.getBlock().getPickBlock(state, target, world, pos, player);
         IBlockState below = world.getBlockState(pos.offset(EnumFacing.DOWN));
         IBlockState above = world.getBlockState(pos.offset(EnumFacing.UP));
         int logWood = OreDictionary.getOreID("logWood");
