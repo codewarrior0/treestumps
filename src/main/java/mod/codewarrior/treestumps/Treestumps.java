@@ -3,12 +3,11 @@ package mod.codewarrior.treestumps;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -44,8 +43,7 @@ public class Treestumps
         BlockPos pos = breakSpeedEvent.getPos();
         IBlockState state = world.getBlockState(pos);
 
-        RayTraceResult target = ForgeHooks.rayTraceEyes(player, player.getEntityAttribute(EntityPlayer.REACH_DISTANCE).getAttributeValue() + 1);
-        ItemStack item = state.getBlock().getPickBlock(state, target, world, pos, player);
+        ItemStack item = new ItemStack(state.getBlock(), 1, state.getBlock().damageDropped(state));
         IBlockState below = world.getBlockState(pos.offset(EnumFacing.DOWN));
         IBlockState above = world.getBlockState(pos.offset(EnumFacing.UP));
         int logWood = OreDictionary.getOreID("logWood");
@@ -63,7 +61,7 @@ public class Treestumps
             }
         }
 
-        item = above.getBlock().getPickBlock(above, null, world, pos.offset(EnumFacing.UP), player);
+        item = new ItemStack(above.getBlock(), 1, above.getBlock().damageDropped(above));
         if(!item.isEmpty()) {
             ids = OreDictionary.getOreIDs(item);
 
