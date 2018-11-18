@@ -1,5 +1,7 @@
 package mod.codewarrior.treestumps;
 
+import net.minecraft.block.BlockLog;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -22,15 +24,37 @@ import java.util.Arrays;
 import java.util.List;
 
 @Mod(modid = Treestumps.MODID, version = Treestumps.VERSION)
-public class Treestumps
-{
+public class Treestumps {
     public static final String MODID = "treestumps";
     public static final String VERSION = "$$VERSION$$";
-    
+
     @EventHandler
-    public void init(FMLInitializationEvent event)
-    {
+    public void init(FMLInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    private boolean isLog(World world, BlockPos pos) {
+        int logWood = OreDictionary.getOreID("logWood");
+        IBlockState state = world.getBlockState(pos);
+        if(state.getBlock() instanceof BlockLog) {
+            if (state.getPropertyKeys().contains(BlockLog.LOG_AXIS)) {
+                return state.getValue(BlockLog.LOG_AXIS).equals(BlockLog.EnumAxis.Y);
+            }
+        }
+
+        ItemStack item = new ItemStack(state.getBlock(), 1, state.getBlock().damageDropped(state));
+        if (!item.isEmpty()) {
+            int[] ids = OreDictionary.getOreIDs(item);
+            if (ArrayUtils.contains(ids, logWood)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isDirt(World world, BlockPos pos) {
+        IBlockState state = world.getBlockState(pos);
+        return state.getMaterial() == Material.GROUND || state.getMaterial() == Material.GRASS;
     }
 
     @SubscribeEvent
@@ -41,37 +65,16 @@ public class Treestumps
         EntityPlayer player = breakSpeedEvent.getEntityPlayer();
         World world = player.getEntityWorld();
         BlockPos pos = breakSpeedEvent.getPos();
-        IBlockState state = world.getBlockState(pos);
 
-        ItemStack item = new ItemStack(state.getBlock(), 1, state.getBlock().damageDropped(state));
-        IBlockState below = world.getBlockState(pos.offset(EnumFacing.DOWN));
-        IBlockState above = world.getBlockState(pos.offset(EnumFacing.UP));
-        int logWood = OreDictionary.getOreID("logWood");
-
-        int[] ids;
-
-        if (!item.isEmpty()) {
-            ids = OreDictionary.getOreIDs(item);
-
-            // Make a log harder if it is above dirt.
-            if (ArrayUtils.contains(ids, logWood)) {
-                if (below.getBlock() == Blocks.DIRT) {
-                    breakSpeedEvent.setNewSpeed(breakSpeedEvent.getNewSpeed() * 0.05f);
-                }
-            }
+        if (isLog(world, pos) && isDirt(world, pos.down()))
+        {
+            breakSpeedEvent.setNewSpeed(breakSpeedEvent.getNewSpeed() * 0.05f);
+        }
+        else if (isLog(world, pos.up()) && isDirt(world, pos))
+        {
+            breakSpeedEvent.setNewSpeed(breakSpeedEvent.getNewSpeed() * 0.01f);
         }
 
-        item = new ItemStack(above.getBlock(), 1, above.getBlock().damageDropped(above));
-        if(!item.isEmpty()) {
-            ids = OreDictionary.getOreIDs(item);
-
-            // Make dirt harder if it is below a log.
-            if (ArrayUtils.contains(ids, logWood)) {
-                if (state.getBlock() == Blocks.DIRT) {
-                    breakSpeedEvent.setNewSpeed(breakSpeedEvent.getNewSpeed() * 0.01f);
-                }
-            }
-        }
     }
 
 }
