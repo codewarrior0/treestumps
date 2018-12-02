@@ -1,0 +1,11 @@
+{
+  "id": "treestumps",
+  "name": "Treestumps",
+  "version": "4.0.0",
+  "side": "universal",
+  "initializer": "mod.codewarrior.treestumps.TreestumpsMod",
+  "mixins": {
+    "client": "modid.client.json",
+    "common": "modid.common.json"
+  }
+}
